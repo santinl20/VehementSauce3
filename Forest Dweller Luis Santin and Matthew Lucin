@@ -1,1 +1,47 @@
+#include <kipr/botball.h> //Luis Santin and Matthew Lucin 
 
+int l_motor = 0;
+int r_motor = 2; //Port number 2 necessary for design of botball
+int lspeed = 50;
+int rspeed = 60;
+int pause = 2000;
+int backtime = 3000;
+int turntime = 2000;
+int l_bumper = 0;
+int r_bumper = 9;
+int main()
+{
+  while(1){ //(1) = true, so whenever it is true
+  forward(); //move forward
+  if(digital(r_bumper)){ //condition for right bumper to have a collision  
+  backward(); //move backward
+  right(); //turn right 
+  }
+  if(digital(l_bumper)){ //condition forr left bumper to have a collision
+  backward();
+  left(); //turn left
+  }
+}
+}
+
+FUNCTION DEFINITIONS
+void forward(){
+motor(l_motor, lspeed);
+motor(r_motor, rspeed);
+}
+void backward(){
+motor(l_motor, -lspeed); //negative speed is the opposite of the original movement and speed
+motor(r_motor, -rspeed);
+msleep(backtime); //moving backwards for 2 seconds
+ao();
+}
+void left(){
+motor(r_motor, rspeed); //cannot turn left on the left motor, so must use right motor to pivot off the left motionless motor
+msleep(turntime); //time for turning should make the botball use the other bumper for the next if statement
+ao();
+}
+void right(){
+motor(l_motor, lspeed);
+msleep(turntime);
+ao();
+}
