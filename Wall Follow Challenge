@@ -7,24 +7,25 @@ int pause = 2000;
 int arm_pos = 750;
 int lspeed = 30;
 int rspeed = 30;
-int turntime = 1000;
+int turntime = 2000;
 int s_et = 0;         						//side sensor
 int f_et = 5;         						//front sensor
-int target = 2800;     						//indicates wall is too close
+int target = 2700;     						//indicates wall is too close
 
 int main(){
 	follow_wall();							//a single function
+    t_left();
  return 0;
 }
 
          //function//
     void t_left(){
         motor(l_motor, lspeed);
-        motor(r_motor, lspeed+20);
+        motor(r_motor, lspeed+30);
     }
     void t_right(){
         motor(r_motor, rspeed);
-        motor(r_motor, rspeed+20);
+        motor(l_motor, lspeed+30);
     }
     void follow_wall(){
     while(analog(f_et)<target){           //wall detected will turn left...when not detected follow if conditions 
