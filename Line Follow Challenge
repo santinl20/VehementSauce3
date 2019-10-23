@@ -1,1 +1,45 @@
+#include <kipr/botball.h>
+//declare variables
+int l_motor = 0;
+int r_motor = 2;
+int speed = 50;
+int pause = 2000;
+int arm_pos = 750;
+int lspeed = 30;
+int rspeed = 30;
+int IR = 0;									//infared emitter sensor
+int f_et = 5;         						//front sensor
+int target = 2700;							//indicates wall is too close
+int zone = 1600;							//when black surface is indicated
 
+int main()
+
+{
+    printf("Find the Black Line\n");
+    while(analog(IR)<zone){					  //true statement: move forward to find black line
+	forward();
+	}
+    if(analog(IR)>=zone){                     //number >= zone = go forward and right
+         printf("on line\n");
+         t_left();
+      }     
+      if(analog(IR)<zone){  		          //when number < target = go forward and left
+      printf("off line\n");
+          t_right();                          //action will make robot do a serpetine and follow black line
+      }
+	return 0;
+}
+
+			//function//
+	void forward(){
+         motor(l_motor,speed);
+         motor(r_motor,speed);
+     }
+    void t_left(){
+        motor(l_motor, lspeed);
+        motor(r_motor, speed);
+    }
+    void t_right(){
+        motor(r_motor, rspeed);
+        motor(l_motor, speed);
+    }
