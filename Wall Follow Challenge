@@ -10,7 +10,7 @@ int rspeed = 30;
 int turntime = 1250;
 int s_et = 0;         						//side sensor
 int f_et = 5;         						//front sensor
-int target = 2400;							//indicates wall is too close
+int target = 2450;							//indicates wall is too close
 int mark = 2700;
 
 int main(){
