@@ -16,14 +16,14 @@ int main()
 {
 	find_line();
     follow_line();
-    enable_servos();
-	set_servo_position(0, 1024);
+    enable_servos();					//robot has an arm to wave its hand at the fans
+	set_servo_position(0, 1024);			//once wall is in the robot's line of sight, it will set the arm in the middle
 	msleep(500);
-	set_servo_position(0, 100);
+	set_servo_position(0, 100);			//robot arm will move from the middle all the way to the right (clockwise) 
 	msleep(500);
-	set_servo_position(0, 1753);
+	set_servo_position(0, 1753);			//robot will move from the right to the left (counter-clockwise)
 	msleep(500);
-    set_servo_position(0, 270);
+    set_servo_position(0, 270);				//robot will move from the left back to the right (clockwise)
     msleep(500);
 	disable_servos();
     return 0;
