@@ -1,1 +1,34 @@
-
+#include <kipr/botball.h>
+int l_motor = 0;
+int r_motor = 2;
+int speed = 40;
+int lspeed = 10;
+int rspeed = 10;
+int blue = 0;
+int green = 1;
+int orange = 2;
+int main()
+{
+  camera_open_black();
+  while (digital(8) == 0)
+{
+  camera_update();
+  if (get_object_count(blue) == 0)
+{
+printf("No objects detected.\n");
+}
+else
+{
+if (get_object_center_x(0, 0) < 80)
+{
+printf("Object is on the left!\n");
+}
+else
+{
+printf("Object is on the right!\n");
+}
+}
+}
+camera_close();
+return 0;
+}
