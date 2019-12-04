@@ -9,26 +9,30 @@ int green = 1;
 int orange = 2;
 int main()
 {
-  camera_open_black();
-  while (digital(8) == 0)
+  camera_open();                                            //turn on camera
+  camera_update();                                          
+  if (get_object_count(blue) <= 0)                          //look for any object that is blue
+  {
+    printf("No objects detected.\n");
+  }
+  else
 {
-  camera_update();
-  if (get_object_count(blue) == 0)
+ if (get_object_count(green) <= 0)                          //look for any object that is green
+  {
+    printf("No objects detected.\n");
+  }
+  else
 {
-printf("No objects detected.\n");
-}
-else
-{
-if (get_object_center_x(0, 0) < 80)
-{
-printf("Object is on the left!\n");
-}
-else
-{
-printf("Object is on the right!\n");
+  if (get_object_count(orange) <= 0)                        //look for any object that is orange
+  {
+    printf("No objects detected.\n");
+  }
+  if(get_object_count((blue) && ((green) && ((orange)       //look for any object that is blue, green, or/and orange 
+  {
+    printf("Object detected.\n");                           //The correct colored pom is detected by the robot
+  }
 }
 }
-}
-camera_close();
+camera_close();                                             //turn off camera
 return 0;
 }
