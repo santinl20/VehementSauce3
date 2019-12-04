@@ -1,1 +1,47 @@
-
+#include <kipr/botball.h>
+int l_motor = 0;
+int r_motor = 2;
+int speed = 40;
+int lspeed = 10;
+int rspeed = 10;
+int blue = 0;
+int main ()
+{
+  camera_open();                                    //turns on camera
+  blue_pom();                                       //function
+  camera_close();                                   //turns off camera
+  return 0;
+}
+//functions
+void t_left(){
+  motor(l_motor, lspeed+70);
+  motor(r_motor, 0);
+  }
+void t_right(){
+  motor(r_motor, rspeed+70);
+  motor(l_motor, 0);
+  }
+void blue pom()
+{
+  if (get_object_center_x(blue,0) < 80;          //look for the blue pom if it is on the left side of its vision
+  {  
+    printf("Object is on the left!\n");
+    t_left();
+  }
+else
+{
+  if (get_object_center_x(blue,0) > 80;         //look for the blue pom if it is on the right side of its vision
+  {
+    printf("Object is on the right!\n");
+    t_right();
+  }
+  else
+{
+  if (get_object_center_y(0, 0) < 120)          //look for the blue pom if it is at a certain distance from the robot
+  {
+    printf("Object is below!\n");
+  }
+  ao();                                         //stop all motors
+}
+}
+}
