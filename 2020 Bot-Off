@@ -1,0 +1,75 @@
+#include <kipr/botball.h>
+int IR = 0;									//infared emitter sensor
+int IR2 = 1;								//infared emitter sensor
+int zone = 4000;							//when black surface is indicated
+int l_motor = 0;
+int r_motor = 3;
+int speed = 80;
+int lspeed = 10;
+int rspeed = 10;
+int Fire;
+int red = 0; 
+int yellow = 1;
+int main()
+{
+    enable_servos();
+	set_servo_position(0, 1180);
+	msleep(2000);
+	set_servo_position(0, 900);
+	msleep(2000);
+    forward();
+    msleep(3000);
+    find_line();
+    msleep(2000);
+    t_left();
+    msleep(500);
+    camera_open();
+    while(1){
+        camera_update;
+        if(get_object_count(red)==1){
+          (get_object_count(yellow)==1);{
+            Fire=1;
+            break;
+        } 
+        }
+        else{
+            Fire=0;
+            break;
+        }
+    }
+    building_1();
+    printf("fire =%d\n", Fire);
+    return 0;
+}
+						//functions// 
+	void forward(){
+         motor(l_motor,speed);
+         motor(r_motor,speed+25);
+    }
+    void t_left(){
+        motor(l_motor, lspeed+50);
+        motor(r_motor, rspeed);
+    }
+    void t_right(){
+        motor(r_motor, rspeed);
+        motor(l_motor, lspeed);
+    }
+	void find_line(){
+    	printf("Find the Black Line\n");
+    	while(analog(IR)<zone){					  //true statement: move forward to find black line
+			forward();
+		}
+        ao();
+    }
+	void building_1(){
+        camera_update();
+        if (get_object_center_x(red, 0) > 80){
+		printf("Object is on the right!\n");
+        forward();
+        msleep(1500);
+    	disable_servos();
+        enable_servos();
+        set_servo_position(0, 900);
+		msleep(2000);
+    }
+    }
