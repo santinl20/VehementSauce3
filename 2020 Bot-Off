@@ -10,6 +10,7 @@ int rspeed = 10;
 int Fire;
 int red = 0; 
 int yellow = 1;
+int counter = 0;
 int main()
 {
     enable_servos();
@@ -21,13 +22,18 @@ int main()
     msleep(3000);
     find_line();
     msleep(2000);
-    t_left();
-    msleep(500);
     camera_open();
+    while(counter < 12){
+        camera_update();
+        printf("yellow = %d\n", get_object_count(yellow));
+        printf("red = %d\n", get_object_count(red));
+        counter = counter + 1;
+        msleep(50);
+    }
     while(1){
-        camera_update;
-        if(get_object_count(red)==1){
-          (get_object_count(yellow)==1);{
+        camera_update();
+        if(get_object_count(yellow)>0){
+         if (get_object_count(red)>0){
             Fire=1;
             break;
         } 
@@ -37,8 +43,7 @@ int main()
             break;
         }
     }
-    building_1();
-    printf("fire =%d\n", Fire);
+    camera_close();
     return 0;
 }
 						//functions// 
