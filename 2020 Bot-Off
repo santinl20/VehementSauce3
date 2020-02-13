@@ -11,12 +11,18 @@ int Fire;
 int red = 0; 
 int yellow = 1;
 int counter = 0;
+int f_et = 5; 
+int f_target_L = 2500;
+int f_target_R = 2850;
+int target=1000;
 int main()
 {
+   wait_for_light(4);
+    shut_down_in(120.0);
     enable_servos();
 	set_servo_position(0, 1180);
 	msleep(2000);
-	set_servo_position(0, 900);
+	set_servo_position(0, 940);
 	msleep(2000);
     forward();
     msleep(3000);
@@ -28,36 +34,50 @@ int main()
         printf("yellow = %d\n", get_object_count(yellow));
         printf("red = %d\n", get_object_count(red));
         counter = counter + 1;
-        msleep(50);
+        msleep(100);
     }
     while(1){
+		if(Fire==1){
         camera_update();
-        if(get_object_count(yellow)>0){
-         if (get_object_count(red)>0){
-            Fire=1;
+        adjust_for_drop();
+        building_1();
             break;
-        } 
         }
-        else{
-            Fire=0;
+        if(Fire==0){
+            building_2();
             break;
         }
     }
-    camera_close();
+    ambulance_1();
     return 0;
 }
 						//functions// 
+	void adjust_for_drop(){
+        printf("Red X = %d\n", get_object_center_x(red,0));
+    }
 	void forward(){
          motor(l_motor,speed);
-         motor(r_motor,speed+25);
+         motor(r_motor,speed+50);
     }
+	void forward_2(){
+    	motor(l_motor,speed);
+        motor(r_motor,speed);
+    }
+	void backward(){
+      motor(r_motor,-25);
+      motor(l_motor,-25);
+    } 
     void t_left(){
-        motor(l_motor, lspeed+50);
+        motor(l_motor, lspeed+25);
         motor(r_motor, rspeed);
     }
     void t_right(){
-        motor(r_motor, rspeed);
+        motor(r_motor, rspeed+25);
         motor(l_motor, lspeed);
+    }
+	void open_claw(){
+    	motor(1,30);
+    	msleep(3000);
     }
 	void find_line(){
     	printf("Find the Black Line\n");
@@ -67,14 +87,38 @@ int main()
         ao();
     }
 	void building_1(){
-        camera_update();
-        if (get_object_center_x(red, 0) > 80){
-		printf("Object is on the right!\n");
-        forward();
-        msleep(1500);
-    	disable_servos();
-        enable_servos();
-        set_servo_position(0, 900);
-		msleep(2000);
+        printf("building_1\n");
+		while(get_object_center_x(red)>85) || (get_object_center_x(red)<80){
+            if(get_object_center_x(red)>85){
+                t_left();
+    }
+            if(get_object_center_x(red)<80){
+                t_right();
+            }
+        }
+        ao();
+	void ambulance_1(){
+        while(analog(f_et)<f_target_L){
+        	forward();
+        }
+        ao();
+        open_claw();
+    }
+	void building_2(){
+        printf("building_2\n");
+    	forward_2();
+        msleep(100);
+        backward();
+        msleep(2000);
+        forward_2();
+        msleep(100);
+        motor(r_motor, rspeed+75);
+        motor(l_motor, 0);
+        msleep(3000);
+        find_line();
+        while(analog(f_et)<target){
+        forward_2();     
+ 		ao();							
+		open_claw();
     }
     }
