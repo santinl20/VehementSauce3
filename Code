@@ -1,1 +1,143 @@
-
+#include <kipr/botball.h>
+int IR = 0;									
+int IR2 = 1;								
+int zone = 4000;							
+int l_motor = 0;
+int r_motor = 3;
+int speed = 80;
+int lspeed = 10;
+int rspeed = 10;
+int Fire;
+int red = 0; 
+int yellow = 1;
+int counter = 0;
+int f_et = 5; 
+int f_target_L = 2500;
+int f_target_R = 2850;
+int target=1000;
+int main()
+{
+   wait_for_light(4);
+    shut_down_in(120.0);
+    enable_servos();
+	set_servo_position(0, 1180);
+	msleep(2000);
+	set_servo_position(0, 940);
+	msleep(2000);
+    forward();
+    msleep(3000);
+    find_line();
+    msleep(2000);
+    t_left();
+    msleep(1000);
+    camera_open_black();
+    while(counter < 12){
+        camera_update();
+        printf("yellow = %d\n", get_object_count(yellow));
+        printf("red = %d\n", get_object_count(red));
+        counter = counter + 1;
+        msleep(100);
+    }
+    while(1)
+    {
+        if(get_object_count(yellow)>0){
+            Fire = 1;
+            break;
+        }else{
+            
+           Fire = 0;
+            break;
+    }
+    }
+    while(1){
+		if(Fire==1){
+        camera_update();
+        adjust_for_drop();
+        camera_update();
+        building_1();
+            break;
+        }
+        if(Fire==0){
+            building_2();
+            break;
+        }
+    }
+    ambulance_1();
+    return 0;
+}
+//functions// 
+	void adjust_for_drop(){
+        printf("Red X = %d\n", get_object_center_x(red,0));
+    }
+	void forward(){
+         motor(l_motor,speed);
+         motor(r_motor,speed+40);
+    }
+	void forward_2(){
+    	motor(l_motor,speed);
+        motor(r_motor,speed);
+    }
+	void backward(){
+      motor(r_motor,-25);
+      motor(l_motor,-25);
+    } 
+    void t_left(){
+        motor(l_motor, lspeed+25);
+        motor(r_motor, 0);
+    }
+    void t_right(){
+        motor(r_motor, rspeed+20);
+        motor(l_motor, 0);
+    }
+	void open_claw(){
+    	motor(1,30);
+    	msleep(3000);
+    }
+	void find_line(){
+    	printf("Find the Black Line\n");
+    	while(analog(IR)<zone){					  //true statement: move forward to find black line
+			forward();
+		}
+        ao();
+    }
+	void building_1(){
+        printf("building_1\n");
+        camera_update();
+		while(get_object_center_x(red,0)>85 || get_object_center_x(red,0)<80){
+            camera_update();
+            if(get_object_center_x(red,0)>85){
+                t_left();
+    }
+            camera_update();
+            if(get_object_center_x(red,0)<80){
+                t_right();
+            }
+        }
+        ao();
+    }
+	void ambulance_1(){
+        printf("ambulance_1\n");
+        while(analog(f_et)<f_target_L){
+        	forward();
+        }
+        ao();
+        open_claw();
+    }
+	void building_2(){
+        printf("building_2\n");
+    	forward_2();
+        msleep(100);
+        backward();
+        msleep(3000);
+        forward_2();
+        msleep(100);
+        motor(r_motor, rspeed+75);
+        motor(l_motor, 0);
+        msleep(3000);
+        find_line();
+        while(analog(f_et)<target){
+        forward_2();     
+ 		ao();							
+		open_claw();
+    }
+    }
