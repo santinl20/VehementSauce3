@@ -1,0 +1,47 @@
+#include <kipr/botball.h>
+int main ()
+{
+  camera_open();                                    
+  orange_pom();                                       
+  camera_close();                                   
+  return 0;
+}
+//functions
+void t_left(){
+  motor(l_motor, lspeed+70);
+  motor(r_motor, 0);
+  }
+
+void t_right(){
+  motor(r_motor, rspeed+70);
+  motor(l_motor, 0);
+  }
+
+void orange_pom()
+{
+ if (get_object_center_x(orange,0) < 80;          
+{  
+ printf("Object is on the left!\n");
+    t_left();
+  }
+  
+else
+
+{
+ if (get_object_center_x(orange,0) > 80;         
+  {
+    printf("Object is on the right!\n");
+    t_right();
+  }
+  
+  else
+  
+{
+  if (get_object_center_y(0, 0) < 120)          
+  {
+    printf("Object is below!\n");
+  }
+  ao();                                        
+}
+}
+}
